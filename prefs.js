@@ -93,26 +93,23 @@ const ClockOverrideSettings = new GObject.Class({
             /* It would be nicer to use just a Label with a hyperlink in it here, for accessibility
                reasons, but god alone knows how to remove the underline on a label, thanks to the
                lack of Gtk CSS examples. And a Button would be ugly. So an EventBox it is for now. */
-            let eb = new Gtk.EventBox({
-                hexpand: true,
-                halign: Gtk.Align.START
-            });
+            let event_controller = new Gtk.EventControllerKey();
+            event_controller.connect('key-pressed', Lang.bind(grid, function(w) {
+                this.update_textbox_value(eg[1]);
+                grid._settings.set_string('override-string', eg[1]);
+                return true;
+				}));
             let r = new Gtk.Label({
                 label: '<tt>' + eg[1] + '</tt>',
                 use_markup: true,
                 hexpand: true,
                 halign: Gtk.Align.START
             });
-            eb.add(r);
-            eb.connect("button-press-event", Lang.bind(grid, function(w) {
-                this.update_textbox_value(eg[1]);
-                grid._settings.set_string('override-string', eg[1]);
-                return true;
-            }));
+            r.add_controller(event_controller);
             r.get_style_context().add_provider(css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
             grid.attach(l, 0, rownumber, 1, 1);
-            grid.attach(eb, 1, rownumber, 2, 1);
+            grid.attach(r, 1, rownumber, 2, 1);
             rownumber += 1;
         });
 
@@ -136,7 +133,7 @@ const ClockOverrideSettings = new GObject.Class({
 
 function buildPrefsWidget() {
      let widget = new ClockOverrideSettings();
-     widget.show_all();
+     widget.show();
 
      return widget;
 }
