@@ -98,7 +98,7 @@ const ClockOverrideSettings = new GObject.Class({
                 this.update_textbox_value(eg[1]);
                 grid._settings.set_string('override-string', eg[1]);
                 return true;
-				}));
+            }));
             let r = new Gtk.Label({
                 label: '<tt>' + eg[1] + '</tt>',
                 use_markup: true,
@@ -114,19 +114,12 @@ const ClockOverrideSettings = new GObject.Class({
         });
 
         let label3 = new Gtk.Label({
-            label: '<a href="https://developer.gnome.org/glib/stable/glib-GDateTime.html#g-date-time-format">' + _("What do all these %x codes mean?") + '</a>',
+            label: '<a href="https://docs.gtk.org/glib/method.DateTime.format.html#description">' + _("What do all these %x codes mean?") + '</a>',
             use_markup: true,
             hexpand: true,
             halign: Gtk.Align.END
         });
         this.attach(label3, 0, rownumber, 3, 1);
-
-
-        this._settings.connect('changed::override-string', Lang.bind(this, function() {
-            let sval = this._settings.get_string('override-string');
-            if (widget.get_text() != sval) widget.set_text(sval);
-        }));
-
     },
 
 });

@@ -57,7 +57,7 @@ distclean:
 
 .PHONY: install
 install: dist
-	gnome-extension install "${DISTNAME}.zip"
+	gnome-extensions install "${DISTNAME}.zip"
 
 .PHONY: test
 test:
