@@ -7,14 +7,25 @@ const Convenience = Me.imports.convenience;
 const Format = Me.imports.formatter;
 
 var settings;
+var last_update;
 
 function init() {
     settings = Convenience.getSettings();
+    last_update = GLib.DateTime.new_now_local();
 }
 
 function overrider(lbl) {
     var FORMAT = settings.get_string("override-string");
     var now = GLib.DateTime.new_now_local();
+
+    // Prevent a really nasty infinite loop if using
+    // invalid or quickly changing format (e.g. %f).
+    // We're limited to 1 second resolution anyway.
+    if (now.difference(last_update) < 500000) {
+        return;
+    }
+
+    last_update = now;
 
     var desired = Format.format(FORMAT, now);
 
